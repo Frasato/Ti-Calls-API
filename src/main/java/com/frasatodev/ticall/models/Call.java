@@ -3,6 +3,9 @@ package com.frasatodev.ticall.models;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +30,7 @@ public class Call {
     private Integer anyDeskNumber;
 
     @Column(name = "creation_date")
-    private Instant creationDate;
+    private String creationDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -36,7 +39,7 @@ public class Call {
     public Call() {
     }
 
-    public Call(UUID id, String title, String sector, String whoCalled, Integer anyDeskNumber, Instant creationDate, User user) {
+    public Call(UUID id, String title, String sector, String whoCalled, Integer anyDeskNumber, String creationDate, User user) {
         this.id = id;
         this.title = title;
         this.sector = sector;
@@ -86,11 +89,11 @@ public class Call {
         this.anyDeskNumber = anyDeskNumber;
     }
 
-    public Instant getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Instant creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -100,5 +103,13 @@ public class Call {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @PrePersist
+    public void onCreateSetDate(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dateFormatted = now.format(formatter);
+        this.creationDate = now.format(formatter);
     }
 }
