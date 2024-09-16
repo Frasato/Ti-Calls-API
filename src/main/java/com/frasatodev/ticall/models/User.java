@@ -2,6 +2,7 @@ package com.frasatodev.ticall.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,14 +23,18 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Call> calls;
+
     public User() {
     }
 
-    public User(UUID userId, String username, String password, String role) {
+    public User(UUID userId, String username, String password, String role, List<Call> calls) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.calls = calls;
     }
 
     public UUID getUserId() {
@@ -62,5 +67,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Call> getCalls() {
+        return calls;
+    }
+
+    public void setCalls(List<Call> calls) {
+        this.calls = calls;
     }
 }
