@@ -29,16 +29,21 @@ public class Call {
     @Column(name = "creation_date")
     private Instant creationDate;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Call() {
     }
 
-    public Call(UUID id, String title, String sector, String whoCalled, Integer anyDeskNumber, Instant creationDate) {
+    public Call(UUID id, String title, String sector, String whoCalled, Integer anyDeskNumber, Instant creationDate, User user) {
         this.id = id;
         this.title = title;
         this.sector = sector;
         this.whoCalled = whoCalled;
         this.anyDeskNumber = anyDeskNumber;
         this.creationDate = creationDate;
+        this.user = user;
     }
 
     public UUID getId() {
@@ -87,5 +92,13 @@ public class Call {
 
     public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
