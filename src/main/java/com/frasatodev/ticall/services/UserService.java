@@ -45,6 +45,14 @@ public class UserService {
         }
     }
 
+    public User registerUser(User user){
+        return userRepository.save(user);
+    }
+
+    public Optional<User> findById(UUID id){
+        return userRepository.findById(id);
+    }
+
     public Optional<User> validateUser(String username, String password){
         return userRepository.findByUsernamePassword(username, password);
     }
