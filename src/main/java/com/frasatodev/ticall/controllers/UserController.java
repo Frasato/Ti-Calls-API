@@ -1,11 +1,15 @@
 package com.frasatodev.ticall.controllers;
 
+import com.frasatodev.ticall.dtos.UserDto;
+import com.frasatodev.ticall.models.Call;
 import com.frasatodev.ticall.models.User;
+import com.frasatodev.ticall.services.CallService;
 import com.frasatodev.ticall.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,9 +20,27 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CallService callService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserDto userDto){
+        if(userDto.getUsername().isEmpty() || userDto.getPassword().isEmpty()){
+            return ResponseEntity.status(400).body("Cannot register users with empty fields");
+        }else{
+            User user = new User();
+
+            user.setUsername(userDto.getUsername());
+            user.setPassword(userDto.getPassword());
+            user.setRole("USER");
+
+            return ResponseEntity.status(200).body(userService.registerUser(user));
+        }
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody String username, @RequestBody String password){
-        Optional<User> userOptional = userService.validateUser(username, password);
+    public ResponseEntity<?> login(@RequestBody UserDto userDto){
+        Optional<User> userOptional = userService.validateUser(userDto.getUsername(), userDto.getPassword());
 
         if(userOptional.isPresent()){
             User user = userOptional.get();
@@ -26,6 +48,36 @@ public class UserController {
         }else {
             return ResponseEntity.status(404).body("User not found!");
         }
+    }
+
+    @PostMapping("/create/{id}")
+    public ResponseEntity<?> createCall(@PathVariable UUID userId, @RequestBody Call call){
+
+        var userWhoCalled = userService.findById(userId).orElseThrow(() -> new RuntimeException("Error to find user!"));
+
+        try{
+            call.setWhoCalled(userWhoCalled.getUsername());
+            Call createdCall = userService.saveCallForUser(call, userId);
+            return ResponseEntity.ok(createdCall);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Error creating call: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getCallsByUser(@PathVariable UUID userId){
+        try{
+            List<Call> userCalls = userService.getAllCallsForUser(userId);
+            return ResponseEntity.ok(userCalls);
+        }catch (Exception e){
+            return ResponseEntity.status(404).body("Calls not found for user: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Call>> getAllCalls(){
+        List<Call> calls = callService.getAllCalls();
+        return ResponseEntity.ok(calls);
     }
 
 }
