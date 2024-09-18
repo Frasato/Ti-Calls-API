@@ -23,7 +23,7 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Call> calls;
 
     public User() {
