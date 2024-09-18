@@ -1,5 +1,6 @@
 package com.frasatodev.ticall.controllers;
 
+import com.frasatodev.ticall.dtos.CallDto;
 import com.frasatodev.ticall.dtos.UserDto;
 import com.frasatodev.ticall.models.Call;
 import com.frasatodev.ticall.models.User;
