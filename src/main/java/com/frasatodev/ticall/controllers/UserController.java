@@ -50,11 +50,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create/{id}")
-    public ResponseEntity<?> createCall(@PathVariable UUID userId, @RequestBody Call call){
-
-        var userWhoCalled = userService.findById(userId).orElseThrow(() -> new RuntimeException("Error to find user!"));
-
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<?> createCall(@PathVariable UUID userId, @RequestBody CallDto callDto){
         try{
 
             Call call = new Call();
