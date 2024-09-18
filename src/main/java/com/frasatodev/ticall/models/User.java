@@ -1,5 +1,6 @@
 package com.frasatodev.ticall.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -23,7 +24,8 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Call> calls;
 
     public User() {
