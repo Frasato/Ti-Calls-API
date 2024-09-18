@@ -45,7 +45,7 @@ public class UserController {
 
         if(userOptional.isPresent()){
             User user = userOptional.get();
-            return ResponseEntity.ok(user);
+            return ResponseEntity.status(200).body(user);
         }else {
             return ResponseEntity.status(404).body("User not found!");
         }
