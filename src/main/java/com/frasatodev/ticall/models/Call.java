@@ -2,10 +2,8 @@ package com.frasatodev.ticall.models;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +21,11 @@ public class Call {
     @Column(name = "sector")
     private String sector;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "who_called")
     private String whoCalled;
-
-    @Column(name = "any_desk_number")
-    private Integer anyDeskNumber;
 
     @Column(name = "creation_date")
     private String creationDate;
@@ -39,12 +37,12 @@ public class Call {
     public Call() {
     }
 
-    public Call(UUID id, String title, String sector, String whoCalled, Integer anyDeskNumber, String creationDate, User user) {
+    public Call(UUID id, String title, String sector, String description, String whoCalled, String creationDate, User user) {
         this.id = id;
         this.title = title;
         this.sector = sector;
+        this.description = description;
         this.whoCalled = whoCalled;
-        this.anyDeskNumber = anyDeskNumber;
         this.creationDate = creationDate;
         this.user = user;
     }
@@ -65,6 +63,14 @@ public class Call {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getSector() {
         return sector;
     }
@@ -79,14 +85,6 @@ public class Call {
 
     public void setWhoCalled(String whoCalled) {
         this.whoCalled = whoCalled;
-    }
-
-    public Integer getAnyDeskNumber() {
-        return anyDeskNumber;
-    }
-
-    public void setAnyDeskNumber(Integer anyDeskNumber) {
-        this.anyDeskNumber = anyDeskNumber;
     }
 
     public String getCreationDate() {
