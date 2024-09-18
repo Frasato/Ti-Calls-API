@@ -56,7 +56,13 @@ public class UserController {
         var userWhoCalled = userService.findById(userId).orElseThrow(() -> new RuntimeException("Error to find user!"));
 
         try{
-            call.setWhoCalled(userWhoCalled.getUsername());
+
+            Call call = new Call();
+            call.setTitle(callDto.getTitle());
+            call.setDescription(callDto.getDescription());
+            call.setSector(callDto.getSector());
+            call.setWhoCalled(callDto.getWhoCalled());
+
             Call createdCall = userService.saveCallForUser(call, userId);
             return ResponseEntity.ok(createdCall);
         }catch (Exception e){
