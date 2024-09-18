@@ -4,9 +4,7 @@ import com.frasatodev.ticall.models.Call;
 import com.frasatodev.ticall.models.User;
 import com.frasatodev.ticall.repositories.CallRepository;
 import com.frasatodev.ticall.repositories.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
