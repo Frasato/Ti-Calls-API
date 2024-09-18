@@ -81,7 +81,7 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<List<Call>> getAllCalls(){
         List<Call> calls = callService.getAllCalls();
-        return ResponseEntity.ok(calls);
+        return ResponseEntity.status(200).body(calls);
     }
 
 }
