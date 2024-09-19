@@ -1,10 +1,13 @@
 package com.frasatodev.ticall.controllers;
 
 import com.frasatodev.ticall.dtos.CallDto;
+import com.frasatodev.ticall.dtos.EndCallDto;
 import com.frasatodev.ticall.dtos.UserDto;
 import com.frasatodev.ticall.models.Call;
+import com.frasatodev.ticall.models.EndCall;
 import com.frasatodev.ticall.models.User;
 import com.frasatodev.ticall.services.CallService;
+import com.frasatodev.ticall.services.EndCallService;
 import com.frasatodev.ticall.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,9 @@ public class UserController {
 
     @Autowired
     private CallService callService;
+
+    @Autowired
+    private EndCallService endCallService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDto userDto){
@@ -82,6 +88,30 @@ public class UserController {
     public ResponseEntity<List<Call>> getAllCalls(){
         List<Call> calls = callService.getAllCalls();
         return ResponseEntity.status(200).body(calls);
+    }
+
+    @PostMapping("/delete/{callId}")
+    public ResponseEntity<?> deleteCall(@PathVariable UUID callId, @RequestBody EndCallDto endCallDto){
+        Optional<Call> call = callService.findCallById(callId);
+
+        if(call.isPresent()){
+            EndCall endCall = new EndCall();
+
+            endCall.setTitle(endCallDto.getTitle());
+            endCall.setDescription(endCallDto.getDescription());
+            endCall.setSector(endCallDto.getSector());
+            endCall.setWhoCalled(endCallDto.getWhoCalled());
+            endCall.setCreationDate(endCallDto.getCreationDate());
+
+            var findedCall = call.get();
+
+            endCallService.saveCall(endCall);
+            callService.removeCall(findedCall);
+
+            return ResponseEntity.status(200).body(endCall);
+        }else {
+            return ResponseEntity.status(404).body("Call not found");
+        }
     }
 
 }
