@@ -109,7 +109,6 @@ public class Call {
     public void onCreateSetDate(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String dateFormatted = now.format(formatter);
         this.creationDate = now.format(formatter);
     }
 }
