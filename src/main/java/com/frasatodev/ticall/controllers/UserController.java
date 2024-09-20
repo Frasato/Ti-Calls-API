@@ -2,6 +2,7 @@ package com.frasatodev.ticall.controllers;
 
 import com.frasatodev.ticall.dtos.CallDto;
 import com.frasatodev.ticall.dtos.EndCallDto;
+import com.frasatodev.ticall.dtos.StatusDto;
 import com.frasatodev.ticall.dtos.UserDto;
 import com.frasatodev.ticall.models.Call;
 import com.frasatodev.ticall.models.EndCall;
@@ -91,7 +92,7 @@ public class UserController {
         return ResponseEntity.status(200).body(calls);
     }
 
-    @PostMapping("/delete/{callId}")
+    @DeleteMapping("/delete/{callId}")
     public ResponseEntity<?> deleteCall(@PathVariable UUID callId, @RequestBody EndCallDto endCallDto){
         Optional<Call> call = callService.findCallById(callId);
 
@@ -112,6 +113,20 @@ public class UserController {
             return ResponseEntity.status(200).body(endCall);
         }else {
             return ResponseEntity.status(404).body("Call not found");
+        }
+    }
+
+    @PutMapping("/status/{callId}")
+    public ResponseEntity<?> changeStatusCall(@PathVariable UUID callId, @RequestBody StatusDto status){
+        Optional<Call> findedCall = callService.findCallById(callId);
+
+        if(findedCall.isPresent()){
+            Call call = findedCall.get();
+            call.setCallStatus(status.getStatus());
+
+            return ResponseEntity.status(200).body(callService.saveCall(call));
+        }else{
+            return ResponseEntity.status(404).body("Call not found!");
         }
     }
 
