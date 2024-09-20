@@ -27,4 +27,8 @@ public class CallService {
         return callRepository.findById(id);
     }
 
+    public Call saveCall(Call call){
+        return callRepository.save(call);
+    }
+
 }
