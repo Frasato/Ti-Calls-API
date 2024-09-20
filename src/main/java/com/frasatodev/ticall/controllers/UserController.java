@@ -66,6 +66,7 @@ public class UserController {
             call.setDescription(callDto.getDescription());
             call.setSector(callDto.getSector());
             call.setWhoCalled(callDto.getWhoCalled());
+            call.setCallStatus("Em Espera");
 
             Call createdCall = userService.saveCallForUser(call, userId);
             return ResponseEntity.ok(createdCall);
