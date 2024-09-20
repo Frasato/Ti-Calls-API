@@ -31,6 +31,9 @@ public class Call {
     @Column(name = "creation_date")
     private String creationDate;
 
+    @Column(name = "call_status")
+    private String callStatus;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -39,13 +42,14 @@ public class Call {
     public Call() {
     }
 
-    public Call(UUID id, String title, String sector, String description, String whoCalled, String creationDate, User user) {
+    public Call(UUID id, String title, String sector, String description, String whoCalled, String creationDate, String callStatus, User user) {
         this.id = id;
         this.title = title;
         this.sector = sector;
         this.description = description;
         this.whoCalled = whoCalled;
         this.creationDate = creationDate;
+        this.callStatus = callStatus;
         this.user = user;
     }
 
@@ -95,6 +99,14 @@ public class Call {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getCallStatus() {
+        return callStatus;
+    }
+
+    public void setCallStatus(String callStatus) {
+        this.callStatus = callStatus;
     }
 
     public User getUser() {
