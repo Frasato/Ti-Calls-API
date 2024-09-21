@@ -62,15 +62,28 @@ public class UserController {
     public ResponseEntity<?> createCall(@PathVariable UUID userId, @RequestBody CallDto callDto){
         try{
 
-            Call call = new Call();
-            call.setTitle(callDto.getTitle());
-            call.setDescription(callDto.getDescription());
-            call.setSector(callDto.getSector());
-            call.setWhoCalled(callDto.getWhoCalled());
-            call.setCallStatus("Em Espera");
+            var callSector = callDto.getSector().toLowerCase().trim();
 
-            Call createdCall = userService.saveCallForUser(call, userId);
-            return ResponseEntity.ok(createdCall);
+            if(callSector == "caixa" ||
+                    callSector == "whatsapp" ||
+                    callSector == "balcão" ||
+                    callSector == "estoque" ||
+                    callSector == "financeiro" ||
+                    callSector == "marketing" ||
+                    callSector == "compras")
+            {
+                Call call = new Call();
+                call.setTitle(callDto.getTitle());
+                call.setDescription(callDto.getDescription());
+                call.setSector(callSector);
+                call.setWhoCalled(callDto.getWhoCalled());
+                call.setCallStatus("Em Espera");
+
+                Call createdCall = userService.saveCallForUser(call, userId);
+                return ResponseEntity.status(201).body(createdCall);
+            }else{
+                return ResponseEntity.status(404).body("Sector not found");
+            }
         }catch (Exception e){
             return ResponseEntity.status(500).body("Error creating call: " + e.getMessage());
         }
